@@ -12,13 +12,19 @@
 #include <Parsers/ASTExplainQuery.h>
 #include <Parsers/ASTTablesInSelectQuery.h>
 #include <Parsers/ASTSelectQuery.h>
+#include <IO/WriteBufferFromOStream.h>
 
 #include <Storages/StorageView.h>
 #include <sstream>
-
+#include <Processors/QueryPlan/QueryPlan.h>
 
 namespace DB
 {
+
+namespace ErrorCodes
+{
+    extern const int INCORRECT_QUERY;
+}
 
 namespace
 {
@@ -82,7 +88,12 @@ Block InterpreterExplainQuery::getSampleBlock()
 
 BlockInputStreamPtr InterpreterExplainQuery::executeImpl()
 {
-    const auto & ast = query->as<ASTExplainQuery &>();
+    auto & ast = query->as<ASTExplainQuery &>();
+
+    /// Set default format TSV, because output is single string.
+    if (!ast.format)
+        ast.format = std::make_shared<ASTIdentifier>("TSV");
+
     Block sample_block = getSampleBlock();
     MutableColumns res_columns = sample_block.cloneEmptyColumns();
 
@@ -98,6 +109,19 @@ BlockInputStreamPtr InterpreterExplainQuery::executeImpl()
         ExplainAnalyzedSyntaxVisitor(data).visit(query);
 
         ast.children.at(0)->format(IAST::FormatSettings(ss, false));
+    }
+    else if (ast.getKind() == ASTExplainQuery::QueryPlan)
+    {
+        if (!dynamic_cast<const ASTSelectWithUnionQuery *>(ast.getExplainedQuery().get()))
+            throw Exception("Only SELECT is supported for EXPLAIN query", ErrorCodes::INCORRECT_QUERY);
+
+        QueryPlan plan;
+
+        InterpreterSelectWithUnionQuery interpreter(ast.getExplainedQuery(), context, SelectQueryOptions());
+        interpreter.buildQueryPlan(plan);
+
+        WriteBufferFromOStream buffer(ss);
+        plan.explain(buffer);
     }
 
     res_columns[0]->insert(ss.str());
