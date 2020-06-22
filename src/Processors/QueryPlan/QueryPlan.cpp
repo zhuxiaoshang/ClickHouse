@@ -202,15 +202,16 @@ void QueryPlan::explain(WriteBuffer & buffer)
 
             auto name = frame.node->step->getName();
             buffer.write(name.data(), name.size());
-            buffer.write('\n');
 
             auto description = frame.node->step->getStepDescription();
             if (!description.empty())
             {
-                buffer.write(prefix.data(), prefix.size());
+                buffer.write(" (", 2);
                 buffer.write(description.data(), description.size());
-                buffer.write('\n');
+                buffer.write(')');
             }
+
+            buffer.write('\n');
 
             frame.is_description_printed = true;
         }
