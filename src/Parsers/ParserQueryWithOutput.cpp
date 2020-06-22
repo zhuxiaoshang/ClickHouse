@@ -109,6 +109,7 @@ bool ParserQueryWithOutput::parseImpl(Pos & pos, ASTPtr & node, Expected & expec
         query_with_output.children.push_back(query_with_output.settings_ast);
     }
 
+    node = std::move(query);
     return true;
 }
 
