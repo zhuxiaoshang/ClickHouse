@@ -21,6 +21,7 @@ class WriteBuffer;
 class QueryPlan
 {
 public:
+    QueryPlan();
     ~QueryPlan();
 
     void unitePlans(QueryPlanStepPtr step, std::vector<QueryPlan> plans);
@@ -45,9 +46,6 @@ private:
     {
         QueryPlanStepPtr step;
         std::vector<Node *> children = {};
-
-        ~Node();
-        Node(Node && other);
     };
 
     using Nodes = std::list<Node>;
