@@ -45,6 +45,8 @@ private:
     {
         QueryPlanStepPtr step;
         std::vector<Node *> children = {};
+
+        ~Node();
     };
 
     using Nodes = std::list<Node>;
