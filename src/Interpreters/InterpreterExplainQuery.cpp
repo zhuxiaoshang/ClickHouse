@@ -85,14 +85,30 @@ Block InterpreterExplainQuery::getSampleBlock()
     return block;
 }
 
+static void fillColumn(IColumn & column, const std::string & str)
+{
+    size_t start = 0;
+    size_t end = 0;
+    size_t size = str.size();
+
+    while (end < size)
+    {
+        if (str[end] == '\n')
+        {
+            column.insertData(str.data() + start, end - start);
+            start = end + 1;
+        }
+
+        ++end;
+    }
+
+    if (start < end)
+        column.insertData(str.data() + start, end - start);
+}
 
 BlockInputStreamPtr InterpreterExplainQuery::executeImpl()
 {
-    auto & ast = query->as<ASTExplainQuery &>();
-
-    /// Set default format TSV, because output is single string.
-    if (!ast.format)
-        ast.format = std::make_shared<ASTIdentifier>("TSV");
+    const auto & ast = query->as<ASTExplainQuery &>();
 
     Block sample_block = getSampleBlock();
     MutableColumns res_columns = sample_block.cloneEmptyColumns();
@@ -124,7 +140,7 @@ BlockInputStreamPtr InterpreterExplainQuery::executeImpl()
         plan.explain(buffer);
     }
 
-    res_columns[0]->insert(ss.str());
+    fillColumn(*res_columns[0], ss.str());
 
     return std::make_shared<OneBlockInputStream>(sample_block.cloneWithColumns(std::move(res_columns)));
 }
