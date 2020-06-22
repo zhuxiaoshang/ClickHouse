@@ -47,6 +47,7 @@ private:
         std::vector<Node *> children = {};
 
         ~Node();
+        Node(Node && other);
     };
 
     using Nodes = std::list<Node>;

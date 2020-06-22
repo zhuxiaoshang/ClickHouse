@@ -14,6 +14,7 @@ namespace ErrorCodes
 
 QueryPlan::~QueryPlan() = default;
 QueryPlan::Node::~Node() = default;
+QueryPlan::Node::Node(Node && other) = default;
 
 void QueryPlan::checkInitialized() const
 {
