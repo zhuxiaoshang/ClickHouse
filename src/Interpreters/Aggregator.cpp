@@ -174,6 +174,8 @@ Strings Aggregator::Params::explain() const
         auto aggregate_strings = aggregate.explain();
         res.insert(res.end(), aggregate_strings.begin(), aggregate_strings.end());
     }
+
+    return res;
 }
 
 Aggregator::Aggregator(const Params & params_)
