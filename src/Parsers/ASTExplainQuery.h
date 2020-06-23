@@ -21,7 +21,6 @@ public:
     ASTExplainQuery(ExplainKind kind_, bool old_syntax_)
         : kind(kind_), old_syntax(old_syntax_)
     {
-        children.emplace_back(); /// explained query
     }
 
     String getID(char delim) const override { return "Explain" + (delim + toString(kind, old_syntax)); }
