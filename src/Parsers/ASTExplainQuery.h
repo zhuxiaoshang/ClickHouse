@@ -35,8 +35,20 @@ public:
         return res;
     }
 
-    const ASTPtr & getExplainedQuery() const { return children.at(0); }
-    const IAST * getSettings() const { return children.size() > 1 ? children[1].get() : nullptr; }
+    void setExplainedQuery(ASTPtr query_)
+    {
+        children.emplace_back(query_);
+        query = std::move(query_);
+    }
+
+    void setSettings(ASTPtr settings_)
+    {
+        children.emplace_back(settings_);
+        ast_settings = std::move(settings_);
+    }
+
+    const ASTPtr & getExplainedQuery() const { return query; }
+    const ASTPtr & getSettings() const { return ast_settings; }
 
 protected:
     void formatQueryImpl(const FormatSettings & settings, FormatState & state, FormatStateStacked frame) const override
@@ -48,6 +60,9 @@ protected:
 private:
     ExplainKind kind;
     bool old_syntax; /// "EXPLAIN AST" -> "AST", "EXPLAIN SYNTAX" -> "ANALYZE"
+
+    ASTPtr query;
+    ASTPtr ast_settings;
 
     static String toString(ExplainKind kind, bool old_syntax)
     {
