@@ -73,6 +73,8 @@ Strings AggregateDescription::explain() const
 
     if (!parameters.empty())
         res.emplace_back("parameters: " + get_params_string(parameters));
+
+    return res;
 }
 
 }
