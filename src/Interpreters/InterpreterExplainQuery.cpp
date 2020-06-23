@@ -184,7 +184,7 @@ BlockInputStreamPtr InterpreterExplainQuery::executeImpl()
         ExplainAnalyzedSyntaxVisitor::Data data{.context = context};
         ExplainAnalyzedSyntaxVisitor(data).visit(query);
 
-        ast.children.at(0)->format(IAST::FormatSettings(ss, false));
+        ast.getExplainedQuery()->format(IAST::FormatSettings(ss, false));
     }
     else if (ast.getKind() == ASTExplainQuery::QueryPlan)
     {
