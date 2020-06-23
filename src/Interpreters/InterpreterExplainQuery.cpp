@@ -136,17 +136,17 @@ BinarySettings checkAndGetSettings(const ASTPtr & ast_settings)
     for (const auto & change : set_query.changes)
     {
         if (supported_settings.count(change.name) == 0)
-            throw Exception("Unknown setting " + change.name + " for EXPLAIN query. Supported settings: " +
+            throw Exception("Unknown setting \"" + change.name + "\" for EXPLAIN query. Supported settings: " +
                             get_supported_settings_string(), ErrorCodes::UNKNOWN_SETTING);
 
         if (change.value.getType() != Field::Types::UInt64)
-            throw Exception("Invalid type " + std::string(change.value.getTypeName()) + " for setting " + change.name +
-                            " only boolean settings are supported", ErrorCodes::INVALID_SETTING_VALUE);
+            throw Exception("Invalid type " + std::string(change.value.getTypeName()) + " for setting \"" + change.name +
+                            "\" only boolean settings are supported", ErrorCodes::INVALID_SETTING_VALUE);
 
         auto value = change.value.get<UInt64>();
         if (value > 1)
-            throw Exception("Invalid value " + std::to_string(value) + " for setting " + change.name +
-                            " only boolean settings are supported", ErrorCodes::INVALID_SETTING_VALUE);
+            throw Exception("Invalid value " + std::to_string(value) + " for setting \"" + change.name +
+                            "\". Only boolean settings are supported", ErrorCodes::INVALID_SETTING_VALUE);
 
         settings[change.name] = value;
     }
