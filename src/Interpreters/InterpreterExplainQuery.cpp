@@ -110,7 +110,7 @@ static void fillColumn(IColumn & column, const std::string & str)
 
 using BinarySettings = std::unordered_map<std::string, bool>;
 
-BinarySettings checkAndGetSettings(const IAST * ast_settings)
+BinarySettings checkAndGetSettings(const ASTPtr & ast_settings)
 {
     if (!ast_settings)
         return {};
