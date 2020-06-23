@@ -36,6 +36,7 @@ public:
     }
 
     const ASTPtr & getExplainedQuery() const { return children.at(0); }
+    const IAST * getSettings() const { return children.size() > 1 ? children[1].get() : nullptr; }
 
 protected:
     void formatQueryImpl(const FormatSettings & settings, FormatState & state, FormatStateStacked frame) const override
