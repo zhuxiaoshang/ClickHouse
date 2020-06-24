@@ -78,6 +78,8 @@ Strings FinishSortingStep::describeActions() const
 
     if (limit)
         res.emplace_back("Limit " + std::to_string(limit));
+
+    return res;
 }
 
 }
