@@ -164,7 +164,7 @@ Strings Aggregator::Params::explain() const
         if (key >= header.columns())
             keys_str += "unknown position " + std::to_string(key);
         else
-            keys_str += src_header.getByPosition(key).name;
+            keys_str += header.getByPosition(key).name;
     }
 
     res.emplace_back("Keys: " + std::move(keys_str));
