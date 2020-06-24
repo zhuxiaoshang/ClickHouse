@@ -222,19 +222,8 @@ static void explainStep(
         auto actions = step.describeActions();
         if (!actions.empty())
         {
-            buffer << prefix << "Actions: ";
-            bool first = true;
-
             for (auto & action : actions)
-            {
-                if (!first)
-                    buffer << "\n" << prefix << "         ";
-
-                first = false;
-                buffer << action;
-            }
-
-            buffer << '\n';
+                buffer << prefix << action << '\n';
         }
     }
 }

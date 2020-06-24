@@ -63,7 +63,8 @@ static Strings getActionsDescription(const ExpressionActionsPtr & expression)
 {
     Strings res;
     for (const auto & action : expression->getActions())
-        res.emplace_back(action.toString());
+        res.emplace_back((res.empty() ? "Actions: "
+                                      : "         ") + action.toString());
 
     return res;
 }

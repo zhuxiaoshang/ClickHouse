@@ -169,10 +169,22 @@ Strings Aggregator::Params::explain() const
 
     res.emplace_back("Keys: " + std::move(keys_str));
 
-    for (const auto & aggregate : aggregates)
+    if (!aggregates.empty())
     {
-        auto aggregate_strings = aggregate.explain();
-        res.insert(res.end(), aggregate_strings.begin(), aggregate_strings.end());
+        bool first = true;
+        for (const auto & aggregate : aggregates)
+        {
+            auto aggregate_strings = aggregate.explain();
+            for (const auto & aggregate_str : aggregate_strings)
+            {
+                if (first)
+                    res.emplace_back("Aggregates: " + aggregate_str);
+                else
+                    res.emplace_back("            " + aggregate_str);
+
+                first = false;
+            }
+        }
     }
 
     return res;
