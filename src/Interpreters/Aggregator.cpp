@@ -158,7 +158,7 @@ Strings Aggregator::Params::explain() const
     String keys_str;
     for (auto key : keys)
     {
-        if (keys_str.empty())
+        if (!keys_str.empty())
             keys_str += ", ";
 
         if (key >= header.columns())
@@ -167,7 +167,7 @@ Strings Aggregator::Params::explain() const
             keys_str += src_header.getByPosition(key).name;
     }
 
-    res.emplace_back("keys: " + std::move(keys_str));
+    res.emplace_back("Keys: " + std::move(keys_str));
 
     for (const auto & aggregate : aggregates)
     {
