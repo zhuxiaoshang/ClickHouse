@@ -30,4 +30,9 @@ void OffsetsStep::transformPipeline(QueryPipeline & pipeline)
     });
 }
 
+Strings OffsetsStep::describeActions() const
+{
+    return {"Offset " + std::to_string(offset)};
+}
+
 }

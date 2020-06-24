@@ -14,6 +14,8 @@ public:
 
     void transformPipeline(QueryPipeline & pipeline) override;
 
+    Strings describeActions() const override;
+
 private:
     size_t offset;
 };
