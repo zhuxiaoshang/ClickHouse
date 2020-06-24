@@ -57,6 +57,8 @@ Strings LimitStep::describeActions() const
 
         res.emplace_back(str);
     }
+
+    return res;
 }
 
 }
