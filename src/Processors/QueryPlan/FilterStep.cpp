@@ -55,4 +55,16 @@ void FilterStep::transformPipeline(QueryPipeline & pipeline)
     });
 }
 
+Strings FilterStep::describeActions() const
+{
+    Strings res;
+
+    res.emplace_back("Filter column: " + filter_column_name);
+
+    for (const auto & action : expression->getActions())
+        res.emplace_back(action.toString());
+
+    return res;
+}
+
 }

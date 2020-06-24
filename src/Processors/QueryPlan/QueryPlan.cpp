@@ -207,7 +207,7 @@ static void explainStep(
             for (const auto & elem : step.getOutputStream().header)
             {
                 if (!first)
-                    buffer << ",\n" << prefix << "        ";
+                    buffer << "\n" << prefix << "        ";
 
                 first = false;
                 elem.dumpStructure(buffer, true);
