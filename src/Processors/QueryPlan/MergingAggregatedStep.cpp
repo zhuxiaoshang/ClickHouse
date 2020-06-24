@@ -65,7 +65,7 @@ void MergingAggregatedStep::transformPipeline(QueryPipeline & pipeline)
 
 Strings MergingAggregatedStep::describeActions() const
 {
-    return params.explain();
+    return params->params.explain();
 }
 
 }
