@@ -1,4 +1,4 @@
-#include <Processors/QueryPlan/OffsetsStep.h>
+#include <Processors/QueryPlan/OffsetStep.h>
 #include <Processors/OffsetTransform.h>
 #include <Processors/QueryPipeline.h>
 
@@ -13,13 +13,13 @@ static ITransformingStep::DataStreamTraits getTraits()
     };
 }
 
-OffsetsStep::OffsetsStep(const DataStream & input_stream_, size_t offset_)
+OffsetStep::OffsetStep(const DataStream & input_stream_, size_t offset_)
     : ITransformingStep(input_stream_, input_stream_.header, getTraits())
     , offset(offset_)
 {
 }
 
-void OffsetsStep::transformPipeline(QueryPipeline & pipeline)
+void OffsetStep::transformPipeline(QueryPipeline & pipeline)
 {
     pipeline.addSimpleTransform([&](const Block & header, QueryPipeline::StreamType stream_type) -> ProcessorPtr
     {
@@ -30,7 +30,7 @@ void OffsetsStep::transformPipeline(QueryPipeline & pipeline)
     });
 }
 
-Strings OffsetsStep::describeActions() const
+Strings OffsetStep::describeActions() const
 {
     return {"Offset " + std::to_string(offset)};
 }
