@@ -233,6 +233,8 @@ static void explainStep(
                 first = false;
                 buffer << action;
             }
+
+            buffer << '\n';
         }
     }
 }
