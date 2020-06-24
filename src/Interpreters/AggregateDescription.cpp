@@ -46,7 +46,7 @@ Strings AggregateDescription::explain() const
         res.emplace_back("  Function: nullptr");
 
     if (!parameters.empty())
-        res.emplace_back("  parameters: " + get_params_string(parameters));
+        res.emplace_back("  Parameters: " + get_params_string(parameters));
 
     String arguments_names_str;
     for (const auto & arg : argument_names)
@@ -60,7 +60,7 @@ Strings AggregateDescription::explain() const
     if (arguments_names_str.empty())
         arguments_names_str = "none";
 
-    res.emplace_back("  arguments: " + arguments_names_str);
+    res.emplace_back("  Arguments: " + arguments_names_str);
 
     String arguments_pos_str;
     for (auto arg : arguments)
@@ -74,7 +74,7 @@ Strings AggregateDescription::explain() const
     if (arguments_pos_str.empty())
         arguments_pos_str = "none";
 
-    res.emplace_back("  argument positions: " + arguments_pos_str);
+    res.emplace_back("  Argument positions: " + arguments_pos_str);
 
     return res;
 }
