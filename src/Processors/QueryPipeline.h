@@ -70,6 +70,24 @@ private:
     };
 
 public:
+
+    class ProcessorsContainer
+    {
+    public:
+        void emplace(ProcessorPtr processor);
+        void emplace(Processors processors_);
+        void setCollectedProcessors(Processors * collected_processors);
+        Processors & get() { return processors; }
+        Processors detach() { return std::move(processors); }
+    private:
+        /// All added processors.
+        Processors processors;
+
+        /// If is set, all newly created processors will be added to this too.
+        /// It is needed for debug. See QueryPipelineProcessorsCollector below.
+        Processors * collected_processors = nullptr;
+    };
+
     QueryPipeline() = default;
     QueryPipeline(QueryPipeline &&) = default;
     ~QueryPipeline() = default;
@@ -185,8 +203,7 @@ private:
     /// Common header for each stream.
     Block current_header;
 
-    /// All added processors.
-    Processors processors;
+    ProcessorsContainer processors;
 
     /// Port for each independent "stream".
     Streams streams;
@@ -214,6 +231,24 @@ private:
     void addSimpleTransformImpl(const TProcessorGetter & getter);
 
     void initRowsBeforeLimit();
+
+    friend class QueryPipelineProcessorsCollector;
+};
+
+/// This is a small class which collects newly added processors to QueryPipeline.
+/// Pipeline must live longer that this class.
+class QueryPipelineProcessorsCollector
+{
+public:
+    explicit QueryPipelineProcessorsCollector(QueryPipeline & pipeline_, IQueryPlanStep * step_ = nullptr);
+    ~QueryPipelineProcessorsCollector();
+
+    Processors detachProcessors(size_t group);
+
+private:
+    QueryPipeline & pipeline;
+    IQueryPlanStep * step;
+    Processors processors;
 };
 
 }

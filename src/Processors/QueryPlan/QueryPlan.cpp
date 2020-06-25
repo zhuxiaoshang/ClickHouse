@@ -264,4 +264,48 @@ void QueryPlan::explain(WriteBuffer & buffer, const ExplainOptions & options)
     }
 }
 
+static void explainPipelineStep(IQueryPlanStep & step, IQueryPlanStep::FormatSettings settings)
+{
+    step.describePipeline(settings);
+}
+
+void QueryPlan::explainPipeline(WriteBuffer & buffer)
+{
+    checkInitialized();
+
+    IQueryPlanStep::FormatSettings settings{.out = buffer};
+
+    struct Frame
+    {
+        Node * node;
+        size_t offset = 0;
+        bool is_description_printed = false;
+        size_t next_child = 0;
+    };
+
+    std::stack<Frame> stack;
+    stack.push(Frame{.node = root});
+
+    while (!stack.empty())
+    {
+        auto & frame = stack.top();
+
+        if (!frame.is_description_printed)
+        {
+            settings.offset = frame.offset;
+            explainPipelineStep(*frame.node->step, settings);
+            frame.offset = settings.offset;
+            frame.is_description_printed = true;
+        }
+
+        if (frame.next_child < frame.node->children.size())
+        {
+            stack.push(Frame{frame.node->children[frame.next_child], frame.offset});
+            ++frame.next_child;
+        }
+        else
+            stack.pop();
+    }
+}
+
 }
