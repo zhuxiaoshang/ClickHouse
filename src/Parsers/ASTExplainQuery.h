@@ -79,7 +79,7 @@ private:
             case ParsedAST: return old_syntax ? "AST" : "EXPLAIN AST";
             case AnalyzedSyntax: return old_syntax ? "ANALYZE" : "EXPLAIN SYNTAX";
             case QueryPlan: return "EXPLAIN";
-            case QueryPipeline: return "PIPELINE";
+            case QueryPipeline: return "EXPLAIN PIPELINE";
         }
 
         __builtin_unreachable();

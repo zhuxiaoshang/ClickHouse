@@ -20,12 +20,12 @@ const DataStream & IQueryPlanStep::getOutputStream() const
 
 static void doDescribeProcessor(const IProcessor & processor, size_t count, IQueryPlanStep::FormatSettings & settings)
 {
-    settings.out << String(settings.offset * settings.ident, settings.ident_char) << processor.getName();
+    settings.out << String(settings.offset, settings.ident_char) << processor.getName();
     if (count > 1)
         settings.out << " (x" << std::to_string(count) << ")";
 
     settings.out << '\n';
-    ++settings.offset;
+    settings.offset += settings.ident;
 }
 
 void IQueryPlanStep::describePipeline(const Processors & processors, FormatSettings & settings)

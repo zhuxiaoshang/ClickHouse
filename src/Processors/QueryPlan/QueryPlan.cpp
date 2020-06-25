@@ -265,7 +265,7 @@ void QueryPlan::explain(WriteBuffer & buffer, const ExplainOptions & options)
 
 static void explainPipelineStep(IQueryPlanStep & step, IQueryPlanStep::FormatSettings settings)
 {
-    settings.out << String(settings.offset * settings.ident, settings.ident_char) << step.getName() << '\n';
+    settings.out << String(settings.offset, settings.ident_char) << step.getName() << '\n';
     step.describePipeline(settings);
 }
 
@@ -294,7 +294,7 @@ void QueryPlan::explainPipeline(WriteBuffer & buffer)
         {
             settings.offset = frame.offset;
             explainPipelineStep(*frame.node->step, settings);
-            frame.offset = settings.offset;
+            frame.offset = settings.offset + settings.ident;
             frame.is_description_printed = true;
         }
 
