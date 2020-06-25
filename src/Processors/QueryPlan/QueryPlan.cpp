@@ -2,7 +2,6 @@
 #include <Processors/QueryPlan/IQueryPlanStep.h>
 #include <Processors/QueryPipeline.h>
 #include <IO/WriteBuffer.h>
-#include <IO/WriteHelpers.h>
 #include <IO/Operators.h>
 #include <stack>
 
@@ -266,6 +265,7 @@ void QueryPlan::explain(WriteBuffer & buffer, const ExplainOptions & options)
 
 static void explainPipelineStep(IQueryPlanStep & step, IQueryPlanStep::FormatSettings settings)
 {
+    settings.out << String(settings.offset * settings.ident, settings.ident_char) << step.getName();
     step.describePipeline(settings);
 }
 
