@@ -619,7 +619,10 @@ void QueryPipeline::unitePipelines(
             processors.emplace(std::move(converting));
         }
 
+        auto * collector = processors.setCollectedProcessors(nullptr);
         processors.emplace(pipeline.processors.detach());
+        processors.setCollectedProcessors(collector);
+
         streams.addStreams(pipeline.streams);
 
         table_locks.insert(table_locks.end(), std::make_move_iterator(pipeline.table_locks.begin()), std::make_move_iterator(pipeline.table_locks.end()));
@@ -852,13 +855,14 @@ void QueryPipeline::ProcessorsContainer::emplace(Processors processors_)
         emplace(std::move(processor));
 }
 
-void QueryPipeline::ProcessorsContainer::setCollectedProcessors(Processors * collected_processors_)
+Processors * QueryPipeline::ProcessorsContainer::setCollectedProcessors(Processors * collected_processors_)
 {
     if (collected_processors && collected_processors_)
         throw Exception("Cannot set collected processors to QueryPipeline because "
                         "another one object was already created for current pipeline." , ErrorCodes::LOGICAL_ERROR);
 
-    collected_processors = collected_processors_;
+    std::swap(collected_processors, collected_processors_);
+    return collected_processors_;
 }
 
 QueryPipelineProcessorsCollector::QueryPipelineProcessorsCollector(QueryPipeline & pipeline_, IQueryPlanStep * step_)

@@ -19,6 +19,8 @@ class Context;
 
 class IOutputFormat;
 
+class QueryPipelineProcessorsCollector;
+
 class QueryPipeline
 {
 private:
@@ -77,7 +79,7 @@ public:
         bool empty() const { return processors.empty(); }
         void emplace(ProcessorPtr processor);
         void emplace(Processors processors_);
-        void setCollectedProcessors(Processors * collected_processors);
+        Processors * setCollectedProcessors(Processors * collected_processors);
         Processors & get() { return processors; }
         Processors detach() { return std::move(processors); }
     private:
@@ -154,6 +156,8 @@ public:
 
     void enableQuotaForCurrentStreams();
 
+    /// Unite several pipelines together. Result pipeline would have common_header structure.
+    /// If collector is used, it will collect only newly-added processors, but not processors from pipelines.
     void unitePipelines(std::vector<std::unique_ptr<QueryPipeline>> pipelines, const Block & common_header);
 
     PipelineExecutorPtr execute();
