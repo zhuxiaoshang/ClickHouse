@@ -74,6 +74,7 @@ public:
     class ProcessorsContainer
     {
     public:
+        bool empty() const { return processors.empty(); }
         void emplace(ProcessorPtr processor);
         void emplace(Processors processors_);
         void setCollectedProcessors(Processors * collected_processors);
