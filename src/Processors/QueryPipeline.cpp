@@ -849,7 +849,7 @@ void QueryPipeline::ProcessorsContainer::emplace(ProcessorPtr processor)
 void QueryPipeline::ProcessorsContainer::emplace(Processors processors_)
 {
     for (auto & processor : processors_)
-        processors.emplace_back(std::move(processor));
+        emplace(std::move(processor));
 }
 
 void QueryPipeline::ProcessorsContainer::setCollectedProcessors(Processors * collected_processors_)
