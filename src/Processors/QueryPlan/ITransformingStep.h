@@ -12,7 +12,7 @@ public:
         bool preserves_distinct_columns;
     };
 
-    ITransformingStep(DataStream input_stream, Block output_header, DataStreamTraits traits);
+    ITransformingStep(DataStream input_stream, Block output_header, DataStreamTraits traits, bool collect_processors_ = true);
 
     QueryPipelinePtr updatePipeline(QueryPipelines pipelines) override;
 
@@ -23,6 +23,7 @@ public:
 private:
     /// We collect processors got after pipeline transformation.
     Processors processors;
+    bool collect_processors;
 };
 
 }
