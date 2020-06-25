@@ -244,7 +244,7 @@ public:
     explicit QueryPipelineProcessorsCollector(QueryPipeline & pipeline_, IQueryPlanStep * step_ = nullptr);
     ~QueryPipelineProcessorsCollector();
 
-    Processors detachProcessors(size_t group);
+    Processors detachProcessors(size_t group = 0);
 
 private:
     QueryPipeline & pipeline;

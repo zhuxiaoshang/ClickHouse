@@ -18,8 +18,15 @@ ITransformingStep::ITransformingStep(DataStream input_stream, Block output_heade
 
 QueryPipelinePtr ITransformingStep::updatePipeline(QueryPipelines pipelines)
 {
+    QueryPipelineProcessorsCollector collector(*pipelines.front(), this);
     transformPipeline(*pipelines.front());
+    processors = collector.detachProcessors();
     return std::move(pipelines.front());
+}
+
+void ITransformingStep::describePipeline(FormatSettings & settings) const
+{
+    IQueryPlanStep::describePipeline(processors, settings);
 }
 
 }
