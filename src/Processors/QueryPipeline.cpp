@@ -588,6 +588,7 @@ void QueryPipeline::unitePipelines(
     {
         auto & pipeline = *pipeline_ptr;
         pipeline.checkInitialized();
+        pipeline.processors.setCollectedProcessors(processors.getCollectedProcessors());
 
         if (!pipeline.isCompleted())
         {
