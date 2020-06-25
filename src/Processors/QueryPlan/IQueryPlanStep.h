@@ -67,7 +67,7 @@ public:
     virtual Strings describeActions() const { return {}; }
 
     /// Get description of processors added in current step. Should be called after updatePipeline().
-    virtual void describePipeline(FormatSettings & settings) const {}
+    virtual void describePipeline(FormatSettings & /*settings*/) const {}
 
 protected:
     DataStreams input_streams;
