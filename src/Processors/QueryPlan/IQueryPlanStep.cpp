@@ -33,7 +33,7 @@ void IQueryPlanStep::describePipeline(const Processors & processors, FormatSetti
     const IProcessor * prev = nullptr;
     size_t count = 0;
 
-    for (auto it = processors.rbegin(); it != processors.rbegin(); ++it)
+    for (auto it = processors.rbegin(); it != processors.rend(); ++it)
     {
         if (prev && prev->getName() != (*it)->getName())
         {
