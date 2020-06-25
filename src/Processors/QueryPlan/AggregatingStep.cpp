@@ -163,9 +163,10 @@ void AggregatingStep::describePipeline(FormatSettings & settings) const
         IQueryPlanStep::describePipeline(aggregating, settings);
     else
     {
-        IQueryPlanStep::describePipeline(aggregating_in_order, settings);
-        IQueryPlanStep::describePipeline(aggregating_sorted, settings);
+        /// Processors are printed in reverse order.
         IQueryPlanStep::describePipeline(finalizing, settings);
+        IQueryPlanStep::describePipeline(aggregating_sorted, settings);
+        IQueryPlanStep::describePipeline(aggregating_in_order, settings);
     }
 }
 

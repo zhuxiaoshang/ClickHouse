@@ -33,9 +33,9 @@ void IQueryPlanStep::describePipeline(const Processors & processors, FormatSetti
     const IProcessor * prev = nullptr;
     size_t count = 0;
 
-    for (const auto & processor : processors)
+    for (auto it = processors.rbegin(); it != processors.rbegin(); ++it)
     {
-        if (prev && prev->getName() != processor->getName())
+        if (prev && prev->getName() != (*it)->getName())
         {
             doDescribeProcessor(*prev, count, settings);
             count = 0;
@@ -43,7 +43,7 @@ void IQueryPlanStep::describePipeline(const Processors & processors, FormatSetti
         else
             ++count;
 
-        prev = processor.get();
+        prev = it->get();
     }
 
     if (prev)
