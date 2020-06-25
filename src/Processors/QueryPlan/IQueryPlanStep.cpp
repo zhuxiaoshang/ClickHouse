@@ -45,9 +45,8 @@ void IQueryPlanStep::describePipeline(const Processors & processors, FormatSetti
             doDescribeProcessor(*prev, count, settings);
             count = 0;
         }
-        else
-            ++count;
 
+        ++count;
         prev = it->get();
     }
 
