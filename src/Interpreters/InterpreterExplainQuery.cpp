@@ -138,6 +138,8 @@ struct QueryPipelineSettings
 template <typename Settings>
 struct ExplainSettings : public Settings
 {
+    using Settings::boolean_settings;
+
     bool has(const std::string & name) const
     {
         return boolean_settings.count(name) > 0;
